@@ -1,0 +1,55 @@
+# Trabalho 3 - Alpine Linux
+## Integrantes: Laisa Pletsch, Maiara Zucco e Yago Goi
+
+
+# Passos para a realização do trabalho
+
+## 1. Criação da estrutura de diretórios e arquivos
+- Foi criada uma pasta chamada "app".
+- Dentro de "app", armazenamos um arquivo "index.html".
+
+## 2. Criação do Dockerfile
+- No mesmo diretório onde está a pasta "app", criamos o arquivo "Dockerfile" com o seguinte conteúdo:
+
+  FROM alpine
+  RUN apk add --no-cache python3
+  COPY ./app /app
+  WORKDIR /app
+  CMD ["python3", "-m", "http.server", "8080"]
+
+## 3. Criação da imagem Docker
+- Navegamos até o diretório onde está o Dockerfile e executamos:
+  docker build -t alpine_server .
+
+## 4. Criação e execução do container
+- Rodamos o seguinte comando para criar e iniciar o container:
+  docker run -d -p 8080:8080 --name alpine_container alpine_server
+
+## 5. Teste do serviço
+- Acesse no navegador: http://localhost:8080
+
+## 6. Arquivo docker-compose.yml
+- Criamos o arquivo "docker-compose.yml" no diretório com o seguinte conteúdo:
+  
+  version: '3'
+  services:
+    web:
+      image: alpine_server
+      ports:
+        - "8080:8080"
+      volumes:
+        - ./app:/app
+
+## 7. Executamos o serviço
+- Primeiramente paramos o container anterior: Docker stop alpine_container
+- Logo após, utilizamos: docker-compose up -d
+
+## 8. Testar novamente o serviço
+- Acesse novamente: http://localhost:8080
+
+## 9. Finalizar o container
+- Verifiquemos o nome do container com: docker ps
+- Paramos o container em execução: docker stop (nome do container)
+- E o removemos: docker rm (nome do container)
+
+
